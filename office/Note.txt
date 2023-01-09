@@ -1,0 +1,57 @@
+# 关联Excel应用
+app = Dispatch('Excel.Application')
+
+# 设置应用可见
+app.Visible = True
+
+# 不显示警告信息（可以避免兼容性检查导致无法保存的问题）
+app.DisplayAlerts = 0
+
+# 禁用事件
+# xls.EnableEvents = False
+
+# 打开工作簿
+book = app.Workbooks.Open(file_path, False)
+
+# 获取第一个Sheet的名称
+sheet_name = book.Worksheets[0].name  # 中括号形式获取的话，从0开始
+sheet_name = book.Worksheets(1).name  # 小括号形式获取的话，从1开始
+sheet_name = book.Worksheets('sheet_name').name  # sheet名称形式获取
+
+# 遍历输出所有的Sheet名称
+for sheet in book.Worksheets:
+    print(sheet.name)
+
+# 新增Sheet
+sheet_new = book.Worksheets.Add()
+# 更名
+sheet_new.Name = 'new sheet name'
+
+# 清空Sheet的内容
+sheet.UsedRange.ClearContents()
+
+# 清空Sheet的内容和样式
+sheet.UsedRange.Clear()
+
+# 复制Sheet的所有数据
+sheet.UsedRange.Copy()
+
+# 粘贴上一步复制的Sheet数据
+sheet_new.UsedRange.PasteSpecial()
+# 附，相关参数说明：https://learn.microsoft.com/zh-cn/office/vba/api/excel.xlpastetype
+
+# 行、列数获取
+n_row = ws.UsedRange.Rows.Count  # 获取使用区域的行数
+n_col = ws.UsedRange.Columns.Count  # 获取使用区域的列数
+
+# 另存为
+book.SaveAs()
+
+# 保存修改
+book.Save()
+
+# 关闭工作簿
+book.Close()
+
+# 关闭Excel应用
+app.Quit()
